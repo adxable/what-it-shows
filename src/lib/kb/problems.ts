@@ -1,19 +1,16 @@
-// One ticket per problem. causes.ts tells the parser from the hint by tenant and channel; the
-// reports the desk read as a one-day move (desk-notes.json) are a third problem, not a parser case.
-import notes from '#lib/data/desk-notes.json';
+// One ticket per problem. causes.ts tells the parser from the hint by tenant and channel; reports the
+// desk read as a one-day move (desk-notes.json) stay where causes.ts files them, as on the desk's own view.
 import { causeOf, uniqueById, type Report, type Tenant } from '#lib/kb/causes';
 
-export type Problem = 'parser' | 'hint' | 'one-day' | 'unplaced';
+export type Problem = 'parser' | 'hint' | 'unplaced';
 
 export const PROBLEMS: Record<Problem, string> = {
   parser: 'The shared parser reads every date month first; day-first tenants get day and month swapped.',
   hint: 'booking-v3 prints MM/DD/YYYY under its date field; people type month first and the form reads it day first.',
-  'one-day': 'The date moves by exactly one day, or differs between time zones: not a day/month swap.',
   unplaced: 'No tenant on file, so no cause can be told.',
 };
 
 export function problemOf(r: Report, t: Tenant | undefined): Problem {
-  if (notes.oneDayMove.includes(r.id)) return 'one-day';
   return causeOf(r, t) ?? 'unplaced';
 }
 

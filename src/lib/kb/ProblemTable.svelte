@@ -1,5 +1,6 @@
 <script lang="ts">
   import reports from '#lib/data/reports-4471.json';
+  import notes from '#lib/data/desk-notes.json';
   import { PROBLEMS, splitTicket } from '#lib/kb/problems';
   import { uniqueById, type Report } from '#lib/kb/causes';
   import { tenantOf } from '#lib/kb/locales';
@@ -32,6 +33,13 @@
     {/each}
   </tbody>
 </table>
+
+{#each groups as g (g.problem)}
+  {@const moved = g.reports.filter((r) => notes.oneDayMove.includes(r.id)).length}
+  {#if moved}
+    <p class="why">{moved} of the {g.problem} reports read as a one-day move; counted under <code>{g.problem}</code> by tenant, as the desk counts them.</p>
+  {/if}
+{/each}
 
 <style>
   .sum { font-size: 1.1rem; }
